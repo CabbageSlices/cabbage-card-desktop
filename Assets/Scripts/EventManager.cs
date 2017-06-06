@@ -19,10 +19,11 @@ namespace EventManagement {
     /// <summary>
     /// Class that allows objects to listen for events, and trigger events
     /// Implemented as a Singleton for global access
+    /// String parameter used as event type, this is NOT case sensitive so eventName == eventName == EVEnTNamE
     /// </summary>
-    public class EventManager : IEventManager<EventType, EventArgs> {
+    public class EventManager : IEventManager<string, EventArgs> {
 
-        private Dictionary <EventType, EventCallback<EventArgs>> eventCallbacks;
+        private Dictionary <string, EventCallback<EventArgs>> eventCallbacks;
         private static EventManager _instance;
 
         /// <summary>
@@ -38,27 +39,34 @@ namespace EventManagement {
             }
         }
 
-        public void registerCallbackForEvent(EventType eventType, EventCallback<EventArgs> callback) {
+        public void registerCallbackForEvent(string eventType, EventCallback<EventArgs> callback) {
             
+            eventType = eventType.ToLower();
+
             if(!Instance.eventCallbacks.ContainsKey(eventType))
                 Instance.eventCallbacks.Add(eventType, null);
 
             Instance.eventCallbacks[eventType] += callback;
         }
 
-        public void deregisterCallbackForEvent(EventType eventType, EventCallback<EventArgs> callback) {
+        public void deregisterCallbackForEvent(string eventType, EventCallback<EventArgs> callback) {
 
-            if(Instance.eventCallbacks.ContainsKey(eventType))
+            eventType = eventType.ToLower();
+
+            if (Instance.eventCallbacks.ContainsKey(eventType))
                 Instance.eventCallbacks[eventType] -= callback;
         }
 
-        public void triggerEvent(EventType eventType, EventArgs args) {
-            if (Instance.eventCallbacks[eventType] != null)
+        public void triggerEvent(string eventType, EventArgs args) {
+
+            eventType = eventType.ToLower();
+
+            if (Instance.eventCallbacks.ContainsKey(eventType) && Instance.eventCallbacks[eventType] != null)
                 Instance.eventCallbacks[eventType](args);
         }
 
         private EventManager() {
-            eventCallbacks = new Dictionary<EventType, EventCallback<EventArgs>>();
+            eventCallbacks = new Dictionary<string, EventCallback<EventArgs>>();
         }
     }
 }

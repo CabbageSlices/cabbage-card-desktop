@@ -38,8 +38,8 @@ namespace NetworkWrapper {
 
         private void subscribeToEvents() {
 
-            EventManager.Instance.registerCallbackForEvent(EventManagement.EventType.StartConnectionToServer, connect);
-            EventManager.Instance.registerCallbackForEvent(EventManagement.EventType.EndConnectionToServer, disconnect);
+            EventManager.Instance.registerCallbackForEvent("StartConnectionToServer", connect);
+            EventManager.Instance.registerCallbackForEvent("EndConnectionToServer", disconnect);
         }
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace NetworkWrapper {
             if(args.messageType == "sid")
                 return;
 
-            EventManager.Instance.triggerEvent(EventManagement.EventType.ReceiveMessageFromServer, args);
+            EventManager.Instance.triggerEvent("ReceiveMessageFromServer", args);
         }
 
         private string extractMessageType(string socketIOMessage) {

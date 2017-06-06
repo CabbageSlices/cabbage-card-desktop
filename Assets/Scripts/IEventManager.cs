@@ -16,10 +16,9 @@ namespace EventManagement {
     /// Interface that all event managers must implement.
     /// Generics are used to allow variations in the list of supported events, and in the type of data passed to all event handlers
     /// </summary>
-    /// <typeparam name="EventType">Enum specifying all possible event types. Can't constrain to enum so struct is used as constraint instead</typeparam>
+    /// <typeparam name="EventType">string specifying all the event type
     /// <typeparam name="CallbackArgumentType">The data type of the argument passed to the callback function. It must inherit from System.EventArgs</typeparam>
     public interface IEventManager<EventType, CallbackArgumentType> 
-        where EventType : struct
         where CallbackArgumentType : EventArgs {
 
         /// <summary>

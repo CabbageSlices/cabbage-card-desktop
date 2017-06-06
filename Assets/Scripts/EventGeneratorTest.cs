@@ -6,7 +6,7 @@ public class EventGeneratorTest : MonoBehaviour {
     
 	void Start () {
 
-        EventManagement.EventManager.Instance.registerCallbackForEvent(EventManagement.EventType.ReceiveMessageFromServer,
+        EventManagement.EventManager.Instance.registerCallbackForEvent("ReceiveMessageFromServer",
             (System.EventArgs e) => {
                 NetworkWrapper.ReceiveMessageFromServerArgs args = e as NetworkWrapper.ReceiveMessageFromServerArgs;
                 Debug.Log(args.messageData);
@@ -17,11 +17,11 @@ public class EventGeneratorTest : MonoBehaviour {
     void Update() {
 
         if (Input.GetKeyDown(KeyCode.C)) {
-            EventManagement.EventManager.Instance.triggerEvent(EventManagement.EventType.StartConnectionToServer, new NetworkWrapper.StartConnectionToServerArgs() { url = "wss://exploding-kittens-backend.herokuapp.com/" });
+            EventManagement.EventManager.Instance.triggerEvent("StartConnectionToServer", new NetworkWrapper.StartConnectionToServerArgs() { url = "wss://exploding-kittens-backend.herokuapp.com/" });
         }
 
         if (Input.GetKeyDown(KeyCode.D)) {
-            EventManagement.EventManager.Instance.triggerEvent(EventManagement.EventType.EndConnectionToServer, null);
+            EventManagement.EventManager.Instance.triggerEvent("EndConnectionToServer", null);
         }
     }
 }
