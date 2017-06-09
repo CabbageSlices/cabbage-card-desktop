@@ -23,5 +23,13 @@ public class EventGeneratorTest : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.D)) {
             EventManagement.EventManager.Instance.triggerEvent("EndConnectionToServer", null);
         }
+
+        if (Input.GetKeyDown(KeyCode.Z)) {
+            EventManagement.EventManager.Instance.triggerEvent("ShuffleDeck", null);
+        }
+
+        if (Input.GetKeyDown(KeyCode.X)) {
+            EventManagement.EventManager.Instance.triggerEvent("DrawCard", new DrawCardArgs() {position = 0, playerID = 1});
+        }
     }
 }
