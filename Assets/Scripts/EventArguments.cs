@@ -7,5 +7,4 @@ using UnityEngine;
 /// </summary>
 public class DrawCardResponseArgs : System.EventArgs {
     public GameObject card; ///<Remark>card that was drawn</Remark>
-    public int playerId;///<Remark>id of player who drew the card</Remark>
 }

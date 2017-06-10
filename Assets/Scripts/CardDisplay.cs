@@ -6,21 +6,33 @@ using UnityEngine;
 /// Class that represents a single card
 /// Provides a way to choose a sprite image by name, display different faces of the card
 /// </summary>
+[RequireComponent(typeof(CardInfo))]
 public class CardDisplay : MonoBehaviour {
-
-    ///<Remark>Name of the card, used for identification, and to get card image</Remark>
-    public string cardName;
     
     public GameObject front;
     public GameObject back;
-    
-	void Start () {
 
+    public CardInfo info;
+
+    ///<Remark>Name of the card, used for identification, and to get card image</Remark>
+    private string cardName {
+        get {
+            if(info != null)
+                return info.cardName;
+            return "c1";
+        }
+    }
+
+    void Start () {
+        
 		if(front == null)
             front = transform.Find("front").gameObject;
 
         if (back == null)
             back = transform.Find("back").gameObject;
+
+        if(info == null)
+            info = GetComponent<CardInfo>();
 
         loadFrontImage();
         showBack();
@@ -63,7 +75,7 @@ public class CardDisplay : MonoBehaviour {
     /// <summary>
     /// Force  the card to draw on top of deck
     /// </summary>
-    public void drawOnTop() {
+    public void drawOnTopOfDeck() {
 
         front.GetComponent<SpriteRenderer>().sortingOrder = 3;
         back.GetComponent<SpriteRenderer>().sortingOrder = 3;
@@ -72,7 +84,7 @@ public class CardDisplay : MonoBehaviour {
     /// <summary>
     /// Force the card to draw on bottom of deck
     /// </summary>
-    public void drawOnBottom() {
+    public void drawOnBottomOfDeck() {
 
         front.GetComponent<SpriteRenderer>().sortingOrder = 0;
         back.GetComponent<SpriteRenderer>().sortingOrder = 0;

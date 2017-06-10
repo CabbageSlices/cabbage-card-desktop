@@ -20,7 +20,7 @@ public class CardInteractionHandler : MonoBehaviour {
     public void onDraw(int playerID) {
         
         //begin draw animation (move card to top of screen)
-        tween.startTween(transform.position.y, transform.position.y + 15, 1,
+        tween.startTween(transform.position.y, transform.position.y + 15, 0.5f,
             newVal => transform.position = new Vector3(transform.position.x, newVal, transform.position.z),
             () => { cardCompleteDraw.onDrawAnimationComplete(playerID); });
     }

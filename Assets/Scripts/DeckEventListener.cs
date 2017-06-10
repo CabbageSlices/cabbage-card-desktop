@@ -14,6 +14,7 @@ public class DeckEventListener : MonoBehaviour {
     public Deck deck;
     
 	void Start () {
+
 		if(deck == null)
             deck = GetComponent<Deck>();
 
@@ -27,10 +28,12 @@ public class DeckEventListener : MonoBehaviour {
     }
 	
 	public void onShuffleDeck(EventArgs e) {
+
         deck.shuffle();
     }
 
     public void onDrawCard(EventArgs e) {
+
         DrawCardArgs args = (DrawCardArgs)e;
         GameObject card = deck.drawCard(args.position);
         card.GetComponent<CardInteractionHandler>().onDraw(args.playerID);
@@ -41,6 +44,7 @@ public class DeckEventListener : MonoBehaviour {
 }
 
 public class DrawCardArgs : EventArgs {
+
     public int position;
     public int playerID;
 }

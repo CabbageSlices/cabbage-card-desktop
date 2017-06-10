@@ -31,7 +31,7 @@ public class Tween: MonoBehaviour {
             elapsedTweenTime += Time.deltaTime;
             float totalDistance = tweenRate * elapsedTweenTime;
 
-            setValueBeingTweened(totalDistance);
+            setValueBeingTweened(startValue + totalDistance);
 
             if(elapsedTweenTime >= tweenDuration)
                 finishTween();

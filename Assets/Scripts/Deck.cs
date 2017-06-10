@@ -88,9 +88,9 @@ public class Deck : MonoBehaviour {
         card.gameObject.SetActive(true);
         
         if(position == 0)
-            card.GetComponent<CardDisplay>().drawOnTop();
+            card.GetComponent<CardDisplay>().drawOnTopOfDeck();
         else
-            card.GetComponent<CardDisplay>().drawOnBottom();
+            card.GetComponent<CardDisplay>().drawOnBottomOfDeck();
 
         return card.gameObject;
     }
