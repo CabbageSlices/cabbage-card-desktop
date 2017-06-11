@@ -30,12 +30,34 @@ public class PlayerEventListener : MonoBehaviour {
     private void subscribeToEvents() {
 
         //listen for events specific to this player
-        EventManager.Instance.registerCallbackForEvent("drawcard/response/" + playerInfo.playerId, onDrawResponse);
+        EventManager.Instance.registerCallbackForEvent("drawcard/done/" + playerInfo.playerId, onDrawResponse);
+        EventManager.Instance.registerCallbackForEvent("useCardEffect/done/" + playerInfo.playerId, onCardEffectDone);
+        EventManager.Instance.registerCallbackForEvent("useCardEffect/" + playerInfo.playerId, onUseCardEffect);
     }
 
     public void onDrawResponse(EventArgs e) {
 
         DrawCardResponseArgs args = (DrawCardResponseArgs)e;
         playerHand.addCard(args.card);
+
+        //end player turn
+        //endTurn();
+    }
+
+    public void onCardEffectDone(EventArgs e) {
+        //not implemented
+        Debug.Log("Card Effect Finished");
+    }
+
+    public void onUseCardEffect(EventArgs e) {
+        CardEffectUseArgs args = (CardEffectUseArgs)e;
+        GameObject card = playerHand.removeCard(args.cardID);
+
+        if(card == null) {
+            Debug.Log("Player tried using a card he doesnt have");
+            return;
+        }
+
+        card.GetComponent<CardInteractionHandler>().onActivateEffect(playerInfo.playerId);
     }
 }

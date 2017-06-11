@@ -8,6 +8,8 @@ using UnityEngine;
 /// </summary>
 public class Deck : MonoBehaviour {
 
+    public delegate void ActionCompleteCallback();
+
 	// Use this for initialization
 	void Start () {
 		
@@ -48,7 +50,8 @@ public class Deck : MonoBehaviour {
     /// <summary>
     /// Shuffle the deck randomly 
     /// </summary>
-    public void shuffle() {
+    /// <param name="callback">function to call when the shuffle animation completes</param>
+    public void shuffle(ActionCompleteCallback callback) {
         
         for(int child = 0; child < transform.childCount - 1; ++child) {
             
@@ -61,6 +64,9 @@ public class Deck : MonoBehaviour {
 
         renderNoCards();
         renderCard(0);
+
+        //wwhen shuffle animation completes
+        callback();
     }
 
     /// <summary>

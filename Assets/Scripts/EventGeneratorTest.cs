@@ -16,11 +16,11 @@ public class EventGeneratorTest : MonoBehaviour {
     
     void Update() {
 
-        if (Input.GetKeyDown(KeyCode.C)) {
+        if (Input.GetKeyDown(KeyCode.A)) {
             EventManagement.EventManager.Instance.triggerEvent("StartConnectionToServer", new NetworkWrapper.StartConnectionToServerArgs() { url = "wss://exploding-kittens-backend.herokuapp.com/" });
         }
 
-        if (Input.GetKeyDown(KeyCode.D)) {
+        if (Input.GetKeyDown(KeyCode.S)) {
             EventManagement.EventManager.Instance.triggerEvent("EndConnectionToServer", null);
         }
 
@@ -29,7 +29,11 @@ public class EventGeneratorTest : MonoBehaviour {
         }
 
         if (Input.GetKeyDown(KeyCode.X)) {
-            EventManagement.EventManager.Instance.triggerEvent("DrawCard", new DrawCardArgs() {position = 0, playerID = 0});
+            EventManagement.EventManager.Instance.triggerEvent("DrawCard", new DrawCardArgs() {position = 0, playerId = 0});
+        }
+
+        if (Input.GetKeyDown(KeyCode.C)) {
+            EventManagement.EventManager.Instance.triggerEvent("useCardEffect/0", new CardEffectUseArgs { cardID=272 });
         }
     }
 }

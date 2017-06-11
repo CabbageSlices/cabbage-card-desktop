@@ -9,6 +9,6 @@ using EventManagement;
 public class CardCompleteDrawNormal : MonoBehaviour, ICardCompleteDraw {
 
 	public void onDrawAnimationComplete(int playerID) {
-        EventManager.Instance.triggerEvent("DrawCard/response/" + playerID, new  DrawCardResponseArgs() {card = gameObject});
+        EventManager.Instance.triggerEvent("DrawCard/done/" + playerID, new  DrawCardResponseArgs() {card = gameObject});
     }
 }
