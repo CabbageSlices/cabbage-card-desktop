@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class EventGeneratorTest : MonoBehaviour {
-    
+
+    public int _playerId = 0;
+
 	void Start () {
 
         EventManagement.EventManager.Instance.registerCallbackForEvent("ReceiveMessageFromServer",
@@ -11,7 +13,6 @@ public class EventGeneratorTest : MonoBehaviour {
                 NetworkWrapper.ReceiveMessageFromServerArgs args = e as NetworkWrapper.ReceiveMessageFromServerArgs;
                 Debug.Log(args.messageData);
             });
-
     }
     
     void Update() {
@@ -29,7 +30,7 @@ public class EventGeneratorTest : MonoBehaviour {
         }
 
         if (Input.GetKeyDown(KeyCode.X)) {
-            EventManagement.EventManager.Instance.triggerEvent("DrawCard", new DrawCardArgs() {position = 0, playerId = 0});
+            EventManagement.EventManager.Instance.triggerEvent("DrawCard", new DrawCardArgs() {position = 0, playerId = _playerId});
         }
 
         if (Input.GetKeyDown(KeyCode.C)) {

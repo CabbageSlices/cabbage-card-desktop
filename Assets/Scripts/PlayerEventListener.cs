@@ -41,7 +41,7 @@ public class PlayerEventListener : MonoBehaviour {
         playerHand.addCard(args.card);
 
         //end player turn
-        //endTurn();
+        EventManager.Instance.triggerEvent("endPlayerTurn", new EndTurnArgs() { playerId = playerInfo.playerId });
     }
 
     public void onCardEffectDone(EventArgs e) {

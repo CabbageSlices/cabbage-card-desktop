@@ -15,3 +15,7 @@ public class DrawCardResponseArgs : System.EventArgs {
 public class CardEffectUseArgs : System.EventArgs {
     public int cardID;///<Remark>id of the card to use</Remark>
 }
+
+public  class EndTurnArgs : System.EventArgs {
+    public int playerId;
+}

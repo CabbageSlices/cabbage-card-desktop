@@ -10,6 +10,8 @@ public class PlayerInfo : MonoBehaviour {
     private static int NumPlayers = 0;
     private int _playerId;
 
+    public string playerName;
+
     /// <summary>
     /// Player's unique id
     /// </summary>
