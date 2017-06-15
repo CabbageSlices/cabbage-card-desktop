@@ -9,7 +9,8 @@ using EventManagement;
 /// </summary>
 [RequireComponent(typeof(PlayerHand))]
 [RequireComponent(typeof(PlayerInfo))]
-public class PlayerEventListener : MonoBehaviour {
+[RequireComponent(typeof(PlayerStatus))]
+public class PlayerEventManager : MonoBehaviour {
 
     public PlayerHand playerHand;
     public PlayerInfo playerInfo;
@@ -30,17 +31,29 @@ public class PlayerEventListener : MonoBehaviour {
     private void subscribeToEvents() {
 
         //listen for events specific to this player
-        EventManager.Instance.registerCallbackForEvent("drawcard/done/" + playerInfo.playerId, onDrawResponse);
+        EventManager.Instance.registerCallbackForEvent("drawcard/done/" + playerInfo.playerId, onDrawSafeResponse);
         EventManager.Instance.registerCallbackForEvent("useCardEffect/done/" + playerInfo.playerId, onCardEffectDone);
         EventManager.Instance.registerCallbackForEvent("useCardEffect/" + playerInfo.playerId, onUseCardEffect);
+        EventManager.Instance.registerCallbackForEvent("drawcard/explosion/" + playerInfo.playerId, onDrawExplosionResponse);
     }
 
-    public void onDrawResponse(EventArgs e) {
+    public void onDrawSafeResponse(EventArgs e) {
 
         DrawCardResponseArgs args = (DrawCardResponseArgs)e;
         playerHand.addCard(args.card);
 
         //end player turn
+        EventManager.Instance.triggerEvent("endPlayerTurn", new EndTurnArgs() { playerId = playerInfo.playerId });
+    }
+
+    public void onDrawExplosionResponse(EventArgs e) {
+
+        //something about diffuse
+
+        //if player has no diffuse
+        //kill self
+        GetComponent<PlayerStatus>().isAlive = false;
+        EventManager.Instance.triggerEvent("playerDeath", new PlayerDeathArgs() { playerId = playerInfo.playerId });
         EventManager.Instance.triggerEvent("endPlayerTurn", new EndTurnArgs() { playerId = playerInfo.playerId });
     }
 
@@ -53,7 +66,7 @@ public class PlayerEventListener : MonoBehaviour {
         CardEffectUseArgs args = (CardEffectUseArgs)e;
         GameObject card = playerHand.removeCard(args.cardID);
 
-        if(card == null) {
+        if (card == null) {
             Debug.Log("Player tried using a card he doesnt have");
             return;
         }

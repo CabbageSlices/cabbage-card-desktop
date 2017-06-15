@@ -8,7 +8,7 @@ using EventManagement;
 /// Class that listens to events and makes the deck respond to the events
 /// </summary>
 [RequireComponent(typeof(Deck))]
-public class DeckEventListener : MonoBehaviour {
+public class DeckEventManager : MonoBehaviour {
 
     //reference to the deck script
     public Deck deck;

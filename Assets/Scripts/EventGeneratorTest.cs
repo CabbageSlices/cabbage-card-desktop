@@ -13,6 +13,12 @@ public class EventGeneratorTest : MonoBehaviour {
                 NetworkWrapper.ReceiveMessageFromServerArgs args = e as NetworkWrapper.ReceiveMessageFromServerArgs;
                 Debug.Log(args.messageData);
             });
+
+        EventManagement.EventManager.Instance.registerCallbackForEvent("startPlayerTurn",
+            (System.EventArgs e) => {
+                StartTurnArgs args = (StartTurnArgs)e;
+                _playerId = args.playerId;
+            });
     }
     
     void Update() {

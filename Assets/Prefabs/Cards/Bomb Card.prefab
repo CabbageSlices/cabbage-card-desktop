@@ -37,12 +37,11 @@ GameObject:
   - component: {fileID: 4455189037221902}
   - component: {fileID: 114312605385568482}
   - component: {fileID: 114807224865411430}
-  - component: {fileID: 114518789526888950}
   - component: {fileID: 114020043284268462}
   - component: {fileID: 114503111379820018}
-  - component: {fileID: 114025868360067838}
+  - component: {fileID: 114548449393334396}
   m_Layer: 0
-  m_Name: Card
+  m_Name: Bomb Card
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -117,17 +116,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tween: {fileID: 114807224865411430}
---- !u!114 &114025868360067838
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1704615215903254}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e334f6b6fef166347bf8d4184d2ad720, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114312605385568482
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -141,7 +129,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   front: {fileID: 1947061473381416}
   back: {fileID: 1610788031645752}
-  info: {fileID: 0}
+  info: {fileID: 114503111379820018}
 --- !u!114 &114503111379820018
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -154,8 +142,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardName: c1
-  c: 64
---- !u!114 &114518789526888950
+--- !u!114 &114548449393334396
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -163,7 +150,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1704615215903254}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f82f29a1196caf64d9240be1d7665b81, type: 3}
+  m_Script: {fileID: 11500000, guid: a7078b15a4a1ee94b82a3ca4bc7d3170, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &114807224865411430

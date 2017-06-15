@@ -24,7 +24,7 @@ public class PlayerTurnManager : MonoBehaviour {
     private void Start() {
 
         indexCurrentPlayer = 0;
-        indexNextPlayer = calculateIdNextPlayer();
+        indexNextPlayer = calculateIndexNextPlayer();
     }
 
     /// <summary>
@@ -35,7 +35,7 @@ public class PlayerTurnManager : MonoBehaviour {
     public int startNextPlayerTurn() {
 
         indexCurrentPlayer = indexNextPlayer;
-        indexNextPlayer = calculateIdNextPlayer();
+        indexNextPlayer = calculateIndexNextPlayer();
 
         return transform.GetChild(indexCurrentPlayer).gameObject.GetComponent<PlayerInfo>().playerId;
     }
@@ -61,17 +61,44 @@ public class PlayerTurnManager : MonoBehaviour {
                 indexNextPlayer = child.GetSiblingIndex();
                 break;
             }
-        }
-        
+        }   
     }
 
-    private int calculateIdNextPlayer() {
-        int next = turnDirection == TurnDirection.Clockwise ? indexCurrentPlayer + 1 : indexCurrentPlayer - 1;
+    /// <summary>
+    /// Marks the given player as dead so that he his turn doesn't come up again
+    /// If it is currently his turn then he must end his turn (allows them to do other stuff once they die)
+    /// </summary>
+    /// <param name="playerId">id of player who died</param>
+    public void onPlayerDeath(int playerId) {
 
-        if(next < 0)
-            next = transform.childCount - 1;
+        Transform toRemove = null;
+        foreach (Transform child in transform) {
 
-        next = next % transform.childCount;
+            if (child.gameObject.GetComponent<PlayerInfo>().playerId == playerId) {
+                toRemove = child;
+                break;
+            }
+        }
+        
+        if(toRemove != null && toRemove.GetSiblingIndex() == indexNextPlayer)
+            indexNextPlayer = calculateIndexNextPlayer();
+    }
+
+    private int calculateIndexNextPlayer() {
+        
+        int next = indexCurrentPlayer;
+
+        //make sure chosen player isn't dead
+        do {
+            next = turnDirection == TurnDirection.Clockwise ? next + 1 : next - 1;
+
+            if (next < 0)
+                next = transform.childCount - 1;
+
+            next = next % transform.childCount;
+
+        } while (!transform.GetChild(next).GetComponent<PlayerStatus>().isAlive && next != indexCurrentPlayer);//if next == indexCurrentPlayyer then we looped over everyone but theyr'e all dead so stop
+
         return next;
     }
 

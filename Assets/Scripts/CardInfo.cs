@@ -19,11 +19,8 @@ public class CardInfo : MonoBehaviour {
             return _cardId;
         }
     }
-    
-    public int c;
 
     private void Start() {
         _cardId = numberOfCardsGenerated++;
-        c = _cardId;
     }
 }

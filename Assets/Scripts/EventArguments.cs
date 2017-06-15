@@ -19,3 +19,11 @@ public class CardEffectUseArgs : System.EventArgs {
 public  class EndTurnArgs : System.EventArgs {
     public int playerId;
 }
+
+public class StartTurnArgs : System.EventArgs {
+    public int playerId;
+}
+
+public class PlayerDeathArgs : System.EventArgs {
+    public int playerId;
+}
