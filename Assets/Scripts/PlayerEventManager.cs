@@ -35,6 +35,9 @@ public class PlayerEventManager : MonoBehaviour {
         EventManager.Instance.registerCallbackForEvent("useCardEffect/done/" + playerInfo.playerId, onCardEffectDone);
         EventManager.Instance.registerCallbackForEvent("useCardEffect/" + playerInfo.playerId, onUseCardEffect);
         EventManager.Instance.registerCallbackForEvent("drawcard/explosion/" + playerInfo.playerId, onDrawExplosionResponse);
+        EventManager.Instance.registerCallbackForEvent("discardForRandomDraw/" + playerInfo.playerId, onDiscardForRandomDraw);
+        EventManager.Instance.registerCallbackForEvent("giveupRandomCard/" + playerInfo.playerId, onGiveupRandomCard);
+        EventManager.Instance.registerCallbackForEvent("receiveCard/" + playerInfo.playerId, onReceiveCard);
     }
 
     public void onDrawSafeResponse(EventArgs e) {
@@ -72,5 +75,25 @@ public class PlayerEventManager : MonoBehaviour {
         }
 
         card.GetComponent<CardInteractionHandler>().onActivateEffect(playerInfo.playerId);
+    }
+
+    public void onDiscardForRandomDraw(EventArgs e) {
+        SelectCardsArgs args = (SelectCardsArgs)e;
+        List<GameObject> cards = playerHand.removeCards(args.cards);
+
+        CardRandomDrawEffect randomDraw = gameObject.AddComponent<CardRandomDrawEffect>();
+        randomDraw.onComplete = () => Destroy(randomDraw);
+        randomDraw.onTriggerEffect(playerInfo.playerId);
+    }
+
+    public void onGiveupRandomCard(EventArgs e) {
+
+        GameObject card = playerHand.removeRandomCard();
+        EventManager.Instance.triggerEvent("giveupRandomCard/done/" + playerInfo.playerId, new GiveupRandomCardResponseArgs() { card = card });
+    }
+
+    public void onReceiveCard(EventArgs e) {
+        ReceiveCardArgs args = (ReceiveCardArgs)e;
+        playerHand.addCard(args.card);
     }
 }

@@ -9,7 +9,7 @@ public class CardInfo : MonoBehaviour {
 
     ///<Remark>count number of cardInfos created so that each card will have a unique ID </Remark>
     private static int numberOfCardsGenerated = 0;
-    private int _cardId;
+    public int _cardId;
 
     ///<Remark>name of  card, for now it should be the same as the card's front image name</Remark>
 	public string cardName;

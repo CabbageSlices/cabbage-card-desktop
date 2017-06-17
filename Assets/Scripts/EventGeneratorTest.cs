@@ -5,8 +5,9 @@ using UnityEngine;
 public class EventGeneratorTest : MonoBehaviour {
 
     public int _playerId = 0;
+    public List<int> _cards = new List<int>();
 
-	void Start () {
+    void Start() {
 
         EventManagement.EventManager.Instance.registerCallbackForEvent("ReceiveMessageFromServer",
             (System.EventArgs e) => {
@@ -20,7 +21,7 @@ public class EventGeneratorTest : MonoBehaviour {
                 _playerId = args.playerId;
             });
     }
-    
+
     void Update() {
 
         if (Input.GetKeyDown(KeyCode.A)) {
@@ -36,11 +37,19 @@ public class EventGeneratorTest : MonoBehaviour {
         }
 
         if (Input.GetKeyDown(KeyCode.X)) {
-            EventManagement.EventManager.Instance.triggerEvent("DrawCard", new DrawCardArgs() {position = 0, playerId = _playerId});
+            EventManagement.EventManager.Instance.triggerEvent("DrawCard", new DrawCardArgs() { position = 0, playerId = _playerId });
         }
 
         if (Input.GetKeyDown(KeyCode.C)) {
-            EventManagement.EventManager.Instance.triggerEvent("useCardEffect/0", new CardEffectUseArgs { cardID=272 });
+            EventManagement.EventManager.Instance.triggerEvent("useCardEffect/" + _playerId, new CardEffectUseArgs { cardID = 272 });
+        }
+
+        if (Input.GetKeyDown(KeyCode.V)) {
+            EventManagement.EventManager.Instance.triggerEvent("discardForRandomDraw/" + _playerId, new SelectCardsArgs() { cards = _cards.ToArray() });
+        }
+
+        if (Input.GetKeyDown(KeyCode.B)) {
+            EventManagement.EventManager.Instance.triggerEvent("selectTargetPlayer/done/" + _playerId, new SelectTargetPlayerResponseArgs() { playerBeingTargeted = 1 });
         }
     }
 }

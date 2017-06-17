@@ -4,7 +4,6 @@ using UnityEngine;
 
 /// <summary>
 /// Interface used by all scripts that provide an effect for cards
-/// draw completion effect is any effect that should be activated when the card's draw animation is finished
 /// </summary>
 public interface ICardActivateEffect {
 

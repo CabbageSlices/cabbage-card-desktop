@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 /// <summary>
 /// Define bevhariour a player's hand
@@ -38,6 +39,35 @@ public class PlayerHand : MonoBehaviour {
         }
 
         return toRemove;
+    }
+
+    /// <summary>
+    /// Remove the cards with the given ID from the player's hand. returns all the removed cards, or an empty list if the player ddoesn't have those acards on hand
+    /// </summary>
+    /// <param name="cardIds">array of ids to remove</param>
+    /// <returns></returns>
+    public List<GameObject> removeCards(int[] cardIds) {
+        
+        List<GameObject> removed = new List<GameObject>();
+        foreach (Transform card in transform) {
+
+            if (cardIds.Contains(card.gameObject.GetComponent<CardInfo>().cardId)) {
+                removed.Add(card.gameObject);
+                card.parent = null;
+
+                //enable card so it can do stuff
+                card.gameObject.SetActive(true);
+            }
+        }
+
+        return removed;
+    }
+
+    public GameObject removeRandomCard() {
+        Transform cardTransform = transform.GetChild(Random.Range(0, transform.childCount));
+        cardTransform.parent = null;
+
+        return cardTransform.gameObject;
     }
 
     /// <summary>
