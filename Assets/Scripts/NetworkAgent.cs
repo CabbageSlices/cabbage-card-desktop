@@ -57,8 +57,13 @@ namespace NetworkWrapper {
             //connect to the given url, append the socket.io protocal parameters
             socket = new WebSocket(connectionArgs.url + "/socket.io/?EIO=2&transport=websocket");
             socket.OnMessage += onMessage;
+            socket.OnOpen += onOpen;
 
             socket.ConnectAsync();
+        }
+
+        private void onOpen(object sender, EventArgs e) {
+            Debug.Log("connected");
         }
 
         /// <summary>

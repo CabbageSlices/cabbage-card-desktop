@@ -42,13 +42,3 @@ public class DeckEventManager : MonoBehaviour {
         //OR allow card to determine how it handles a draw
     }
 }
-
-public class DrawCardArgs : EventArgs {
-
-    public int position;
-    public int playerId;
-}
-
-public class DeckShuffleArgs : EventArgs {
-    public int playerId;
-}

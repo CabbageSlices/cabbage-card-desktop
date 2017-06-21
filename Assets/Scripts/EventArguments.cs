@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 /// <summary>
 /// argumetns for response event to draw card event
@@ -46,4 +47,14 @@ public class GiveupRandomCardResponseArgs : System.EventArgs {
 
 public class ReceiveCardArgs : System.EventArgs {
     public GameObject card;
+}
+
+public class DrawCardArgs : EventArgs {
+
+    public int position;
+    public int playerId;
+}
+
+public class DeckShuffleArgs : EventArgs {
+    public int playerId;
 }
