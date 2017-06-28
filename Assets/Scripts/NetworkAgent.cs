@@ -11,9 +11,12 @@ namespace NetworkWrapper {
         public string url;
     }
 
-    public class ReceiveMessageFromServerArgs : EventArgs {
-        public string messageType;
-        public string messageData;
+    /// <summary>
+    /// Arguments used to send message to server and receive emessage from server
+    /// </summary>
+    public class MessageArgs : EventArgs {
+        public string messageType; ///<Remark>Typpe of message ebeing exchanged</Remark>
+        public string messageData; ///<Remark>Event arguments sent to the server, converted to JSON using JSON.net</Remark>
     }
 
     /// <summary>
@@ -40,6 +43,7 @@ namespace NetworkWrapper {
 
             EventManager.Instance.registerCallbackForEvent("StartConnectionToServer", connect);
             EventManager.Instance.registerCallbackForEvent("EndConnectionToServer", disconnect);
+            EventManager.Instance.registerCallbackForEvent("sendMessageToServer", sendMessage);
         }
 
         /// <summary>
@@ -47,7 +51,7 @@ namespace NetworkWrapper {
         /// Function assumes the SocketIO protocal is being used
         /// </summary>
         /// <param name="args">MUST be of type StartConnectionToServerArgs, contains url of the server to connect to</param>
-        private void connect(EventArgs args) {
+        public void connect(EventArgs args) {
 
             StartConnectionToServerArgs connectionArgs = (StartConnectionToServerArgs)args;
 
@@ -62,20 +66,37 @@ namespace NetworkWrapper {
             socket.ConnectAsync();
         }
 
-        private void onOpen(object sender, EventArgs e) {
-            Debug.Log("connected");
-        }
-
         /// <summary>
         /// Disconnect from the server if connected
         /// </summary>
         /// <param name="e"></param>
-        private void disconnect(EventArgs e) {
+        public void disconnect(EventArgs e) {
 
             if (socket == null || !socket.IsAlive)
                 return;
 
             socket.CloseAsync();
+        }
+
+        /// <summary>
+        /// Send a message to the server if connected
+        /// </summary>
+        /// <param name="e">Event argument to send, must be of type MessageArgs</param>
+        public void sendMessage(EventArgs e) {
+            MessageArgs args = e as MessageArgs;
+
+            string toSend = convertToSocketIoMessage(args.messageType, args.messageData);
+            socket.Send(toSend);
+        }
+
+        private string convertToSocketIoMessage(string messageType, string messageDataJson) {
+
+            //formatted to socket.io protocal
+            return "42[\"" + messageType + "\"," + messageDataJson + "]";
+        }
+
+        private void onOpen(object sender, EventArgs e) {
+            EventManager.Instance.triggerEvent("connectToServer", e);
         }
 
         /// <summary>
@@ -86,15 +107,16 @@ namespace NetworkWrapper {
         /// <param name="e"></param>
         private void onMessage(object sender, MessageEventArgs e) {
 
-            ReceiveMessageFromServerArgs args = new ReceiveMessageFromServerArgs() {
+            MessageArgs args = new MessageArgs() {
                 messageType = extractMessageType(e.Data),
                 messageData = extractMessageData(e.Data)
             };
             
             //ignore the session id message
-            if(args.messageType == "sid")
+            if(args.messageType == "sid" || args.messageType == "")
                 return;
-
+            
+            Debug.Log(e.Data);
             EventManager.Instance.triggerEvent("ReceiveMessageFromServer", args);
         }
 

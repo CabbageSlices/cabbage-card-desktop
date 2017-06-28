@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Newtonsoft.Json.Linq;
 
 public class EventGeneratorTest : MonoBehaviour {
 
@@ -12,11 +13,7 @@ public class EventGeneratorTest : MonoBehaviour {
 
     void Start() {
 
-        EventManagement.EventManager.Instance.registerCallbackForEvent("ReceiveMessageFromServer",
-            (System.EventArgs e) => {
-                NetworkWrapper.ReceiveMessageFromServerArgs args = e as NetworkWrapper.ReceiveMessageFromServerArgs;
-                Debug.Log(args.messageData);
-            });
+        EventManagement.EventManager.Instance.registerCallbackForEvent("connectToServer", onConnectToServer);
 
         EventManagement.EventManager.Instance.registerCallbackForEvent("startPlayerTurn",
             (System.EventArgs e) => {
@@ -25,10 +22,27 @@ public class EventGeneratorTest : MonoBehaviour {
             });
     }
 
+    void onConnectToServer(System.EventArgs e) {
+        
+        //ssend the client type to the server
+        JObject data = new JObject(new JProperty("clientType", "unity"));
+
+        EventManagement.EventManager.Instance.triggerEvent("sendMessageToServer", new NetworkWrapper.MessageArgs() { messageType="unityClient", messageData=data.ToString() });
+    }
+
+    void onServerMessage(System.EventArgs e) {
+
+        NetworkWrapper.MessageArgs args = e as NetworkWrapper.MessageArgs;
+
+        if(args.messageType == "clientType") {
+
+        }
+    }
+
     void Update() {
 
         if (Input.GetKeyDown(KeyCode.A)) {
-            EventManagement.EventManager.Instance.triggerEvent("StartConnectionToServer", new NetworkWrapper.StartConnectionToServerArgs() { url = "ws://localhost:3000/" });
+            EventManagement.EventManager.Instance.triggerEvent("StartConnectionToServer", new NetworkWrapper.StartConnectionToServerArgs() { url = remote });
         }
 
         if (Input.GetKeyDown(KeyCode.S)) {
