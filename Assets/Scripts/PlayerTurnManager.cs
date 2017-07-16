@@ -32,7 +32,7 @@ public class PlayerTurnManager : MonoBehaviour {
     /// returns the id of the player whose  turn should start
     /// </summary>
     /// <returns></returns>
-    public int startNextPlayerTurn() {
+    public string startNextPlayerTurn() {
 
         indexCurrentPlayer = indexNextPlayer;
         indexNextPlayer = calculateIndexNextPlayer();
@@ -69,7 +69,7 @@ public class PlayerTurnManager : MonoBehaviour {
     /// If it is currently his turn then he must end his turn (allows them to do other stuff once they die)
     /// </summary>
     /// <param name="playerId">id of player who died</param>
-    public void onPlayerDeath(int playerId) {
+    public void onPlayerDeath(string playerId) {
 
         Transform toRemove = null;
         foreach (Transform child in transform) {

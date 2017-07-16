@@ -24,7 +24,7 @@ public class CardInteractionHandler : MonoBehaviour {
             cardEffect = GetComponent<ICardActivateEffect>();
     }
 
-    public void onDraw(int playerID) {
+    public void onDraw(string playerID) {
         
         //begin draw animation (move card to top of screen)
         tween.startTween(transform.position.y, transform.position.y + 15, 0.5f,
@@ -32,7 +32,7 @@ public class CardInteractionHandler : MonoBehaviour {
             () => { cardCompleteDraw.onDrawAnimationComplete(playerID); });
     }
 
-    public void onActivateEffect(int playerId) {
+    public void onActivateEffect(string playerId) {
         
         //card has no effect to activate
         if(cardEffect == null) {

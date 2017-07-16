@@ -12,5 +12,5 @@ public interface ICardCompleteDraw {
     /// Function to call when the card's drawing animation completes.
     /// </summary>
     /// <param name="playerId">id of the player who drew the card</param>
-	void onDrawAnimationComplete(int playerId);
+	void onDrawAnimationComplete(string playerId);
 }

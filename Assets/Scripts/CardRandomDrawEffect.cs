@@ -6,13 +6,13 @@ using EventManagement;
 
 public class CardRandomDrawEffect : MonoBehaviour, ICardActivateEffect {
 
-    private int idPlayerActivatingEffect;
+    private string idPlayerActivatingEffect;
 
     public delegate void OnCompleteCallback();
     
     public OnCompleteCallback onComplete;
 
-    public void onTriggerEffect(int playerId) {
+    public void onTriggerEffect(string playerId) {
         idPlayerActivatingEffect = playerId;
 
         EventManager.Instance.registerCallbackForEvent("selectTargetPlayer/done/" + idPlayerActivatingEffect, onSelectTargetDone);

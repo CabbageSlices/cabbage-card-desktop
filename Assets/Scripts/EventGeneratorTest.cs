@@ -5,11 +5,11 @@ using Newtonsoft.Json.Linq;
 
 public class EventGeneratorTest : MonoBehaviour {
 
-    public int _playerId = 0;
+    public string _playerId = "";
     public List<int> _cards = new List<int>();
 
     const string remote = "wss://exploding-kittens-backend.herokuapp.com/";
-    const string local = "ws://localhost:3000/";
+    const string local = "ws://localhost:8000/";
 
     void Start() {
 
@@ -23,18 +23,18 @@ public class EventGeneratorTest : MonoBehaviour {
     }
 
     void onConnectToServer(System.EventArgs e) {
-        
+
         //ssend the client type to the server
         JObject data = new JObject(new JProperty("clientType", "unity"));
 
-        EventManagement.EventManager.Instance.triggerEvent("sendMessageToServer", new NetworkWrapper.MessageArgs() { messageType="unityClient", messageData=data.ToString() });
+        EventManagement.EventManager.Instance.triggerEvent("sendMessageToServer", new NetworkWrapper.MessageArgs() { messageType = "unityClient", messageData = data.ToString() });
     }
 
     void onServerMessage(System.EventArgs e) {
 
         NetworkWrapper.MessageArgs args = e as NetworkWrapper.MessageArgs;
 
-        if(args.messageType == "clientType") {
+        if (args.messageType == "clientType") {
 
         }
     }
@@ -42,7 +42,8 @@ public class EventGeneratorTest : MonoBehaviour {
     void Update() {
 
         if (Input.GetKeyDown(KeyCode.A)) {
-            EventManagement.EventManager.Instance.triggerEvent("StartConnectionToServer", new NetworkWrapper.StartConnectionToServerArgs() { url = remote });
+            EventManagement.EventManager.Instance.triggerEvent("StartConnectionToServer", new NetworkWrapper.StartConnectionToServerArgs() { url = local });
+            EventManagement.EventManager.Instance.triggerEvent("connectToServer/accept", new ConnectToServerAcceptArgs { playerName = "nemesh", webClientSocketId = "id1" });
         }
 
         if (Input.GetKeyDown(KeyCode.S)) {
@@ -66,7 +67,7 @@ public class EventGeneratorTest : MonoBehaviour {
         }
 
         if (Input.GetKeyDown(KeyCode.B)) {
-            EventManagement.EventManager.Instance.triggerEvent("selectTargetPlayer/done/" + _playerId, new SelectTargetPlayerResponseArgs() { playerBeingTargeted = 1 });
+            EventManagement.EventManager.Instance.triggerEvent("selectTargetPlayer/done/" + _playerId, new SelectTargetPlayerResponseArgs() { playerBeingTargeted = "1" });
         }
     }
 }

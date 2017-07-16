@@ -9,7 +9,7 @@ using System;
 /// </summary>
 public class CardEffectShuffle : MonoBehaviour, ICardActivateEffect {
 
-    public void onTriggerEffect(int playerID) {
+    public void onTriggerEffect(string playerID) {
         EventManager.Instance.registerCallbackForEvent("shuffleDeck/done", onShuffleComplete);
         EventManager.Instance.triggerEvent("shuffledeck", new DeckShuffleArgs() { playerId = playerID } );
     }

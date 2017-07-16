@@ -90,4 +90,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b95581522ff8bec44afd675ba81dc730, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playerId: 0
   playerName: Nimesh

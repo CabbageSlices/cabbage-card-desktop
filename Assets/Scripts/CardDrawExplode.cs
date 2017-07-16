@@ -9,7 +9,7 @@ using EventManagement;
 /// </summary>
 public class CardDrawExplode : MonoBehaviour, ICardCompleteDraw {
 
-    public void onDrawAnimationComplete(int playerID) {
+    public void onDrawAnimationComplete(string playerID) {
         EventManager.Instance.triggerEvent("DrawCard/explosion/" + playerID, new DrawCardResponseArgs() { card = gameObject });
     }
 }

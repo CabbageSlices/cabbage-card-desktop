@@ -18,15 +18,15 @@ public class CardEffectUseArgs : System.EventArgs {
 }
 
 public  class EndTurnArgs : System.EventArgs {
-    public int playerId;
+    public string playerId;
 }
 
 public class StartTurnArgs : System.EventArgs {
-    public int playerId;
+    public string playerId;
 }
 
 public class PlayerDeathArgs : System.EventArgs {
-    public int playerId;
+    public string playerId;
 }
 
 public class SelectCardsArgs : System.EventArgs {
@@ -34,11 +34,11 @@ public class SelectCardsArgs : System.EventArgs {
 }
 
 public class SelectTargetPlayerArgs: System.EventArgs {
-    public int playerInitiatingTarget;
+    public string playerInitiatingTarget;
 }
 
 public class SelectTargetPlayerResponseArgs : System.EventArgs {
-    public int playerBeingTargeted;
+    public string playerBeingTargeted;
 }
 
 public class GiveupRandomCardResponseArgs : System.EventArgs {
@@ -52,9 +52,45 @@ public class ReceiveCardArgs : System.EventArgs {
 public class DrawCardArgs : EventArgs {
 
     public int position;
-    public int playerId;
+    public string playerId;
 }
 
 public class DeckShuffleArgs : EventArgs {
-    public int playerId;
+    public string playerId;
+}
+
+public class NetworkErrorArgs : EventArgs {
+    public string errorMesssage;
+}
+
+public class ConnectionClosedArgs : EventArgs {
+    public string message;
+}
+
+public class GenerateRoomCodeArgs : EventArgs {
+    public string roomCode;
+}
+
+public class SetRoomCodeArgs : EventArgs {
+    public string roomCode;
+}
+
+public class ConnectToServerArgs : EventArgs {
+    public string playerName;
+    public string webClientSocketId;
+}
+
+public class ConnectToServerAcceptArgs : EventArgs {
+    public string playerName;
+    public string webClientSocketId;
+}
+
+public class ConnectToServerRejectArgs : EventArgs {
+    public string playerName;
+    public string webClientSocketId;
+    public string message;
+}
+
+public class WebClientDisconnectArgs : EventArgs {
+    public string webClientSocketId;
 }

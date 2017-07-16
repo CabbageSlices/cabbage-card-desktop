@@ -11,5 +11,5 @@ public interface ICardActivateEffect {
     /// Function to call when the card's effect is activated
     /// </summary>
     /// <param name="playerId">id of the player who activated the card effect</param>
-	void onTriggerEffect(int playerId);
+	void onTriggerEffect(string playerId);
 }

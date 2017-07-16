@@ -6,7 +6,7 @@ using System;
 using EventManagement;
 
 namespace NetworkWrapper {
-    
+
     public class StartConnectionToServerArgs : EventArgs {
         public string url;
     }
@@ -26,7 +26,7 @@ namespace NetworkWrapper {
     /// events
     /// </summary>
     public class NetworkAgent : MonoBehaviour {
-        
+
         private WebSocket socket;
 
         private void Start() {
@@ -62,6 +62,8 @@ namespace NetworkWrapper {
             socket = new WebSocket(connectionArgs.url + "/socket.io/?EIO=2&transport=websocket");
             socket.OnMessage += onMessage;
             socket.OnOpen += onOpen;
+            socket.OnError += onError;
+            socket.OnClose += onClose;
 
             socket.ConnectAsync();
         }
@@ -76,6 +78,14 @@ namespace NetworkWrapper {
                 return;
 
             socket.CloseAsync();
+        }
+
+        public void onError(object sender, ErrorEventArgs e) {
+            EventManager.Instance.triggerEvent("networkError", new NetworkErrorArgs { errorMesssage = e.Message });
+        }
+
+        public void onClose(object sender, CloseEventArgs e) {
+            EventManager.Instance.triggerEvent("connectionClosed", new ConnectionClosedArgs { message = e.Reason });
         }
 
         /// <summary>
@@ -111,12 +121,12 @@ namespace NetworkWrapper {
                 messageType = extractMessageType(e.Data),
                 messageData = extractMessageData(e.Data)
             };
-            
+
             //ignore the session id message
-            if(args.messageType == "sid" || args.messageType == "")
+            if (args.messageType == "sid" || args.messageType == "")
                 return;
-            
-            Debug.Log(e.Data);
+
+            Debug.Log("Network Agent Received from backend: " + args.messageData);
             EventManager.Instance.triggerEvent("ReceiveMessageFromServer", args);
         }
 

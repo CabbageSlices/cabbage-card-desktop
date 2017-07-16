@@ -8,20 +8,30 @@ using UnityEngine;
 public class PlayerInfo : MonoBehaviour {
 
     private static int NumPlayers = 0;
-    public int _playerId;
+    private string _playerId;
 
     public string playerName;
 
     /// <summary>
     /// Player's unique id
     /// </summary>
-	public int playerId {
+	public string playerId {
         get {
             return _playerId;
         }
+
+        set {
+            _playerId = value;
+        }
     }
 
-    private void Start() {
-        _playerId = NumPlayers++;
+    public string websocketId {
+        get {
+            return playerId;
+        }
+
+        set {
+            playerId = value;
+        }
     }
 }
