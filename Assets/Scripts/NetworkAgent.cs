@@ -4,6 +4,7 @@ using UnityEngine;
 using WebSocketSharp;
 using System;
 using EventManagement;
+using System.Threading;
 
 namespace NetworkWrapper {
 
@@ -27,11 +28,33 @@ namespace NetworkWrapper {
     /// </summary>
     public class NetworkAgent : MonoBehaviour {
 
+        /// <remark>
+        /// how often to send the server a heart beat packet, in seconds
+        /// </remark>
+        public float heartbeatDelay = 10.0f;
+
         private WebSocket socket;
+
+        List<MessageArgs> messageQueue = new List<MessageArgs>();
+
+        Mutex mutex = new Mutex();
 
         private void Start() {
 
             subscribeToEvents();
+        }
+
+        private void Update() {
+            
+            mutex.WaitOne();
+
+            foreach(MessageArgs args in messageQueue) {
+                EventManager.Instance.triggerEvent("ReceiveMessageFromServer", args);
+            }
+            
+            messageQueue.Clear();
+
+            mutex.ReleaseMutex();
         }
 
         private void OnDestroy() {
@@ -64,8 +87,9 @@ namespace NetworkWrapper {
             socket.OnOpen += onOpen;
             socket.OnError += onError;
             socket.OnClose += onClose;
-
+            
             socket.ConnectAsync();
+            StartCoroutine("sendHeartbeat");
         }
 
         /// <summary>
@@ -99,6 +123,19 @@ namespace NetworkWrapper {
             socket.Send(toSend);
         }
 
+        IEnumerator sendHeartbeat() {
+
+            while(true) {
+
+                if(socket.IsAlive) {
+                    string toSend = "2";
+                    socket.Send(toSend);
+                }
+
+                yield return new WaitForSeconds(heartbeatDelay);
+            }
+        }
+
         private string convertToSocketIoMessage(string messageType, string messageDataJson) {
 
             //formatted to socket.io protocal
@@ -106,7 +143,15 @@ namespace NetworkWrapper {
         }
 
         private void onOpen(object sender, EventArgs e) {
-            EventManager.Instance.triggerEvent("connectToServer", e);
+
+            MessageArgs args = new MessageArgs() {
+                messageType = "connectToBackend",
+                messageData = ""
+            };
+
+            mutex.WaitOne();
+            messageQueue.Add(args);
+            mutex.ReleaseMutex();
         }
 
         /// <summary>
@@ -117,6 +162,11 @@ namespace NetworkWrapper {
         /// <param name="e"></param>
         private void onMessage(object sender, MessageEventArgs e) {
 
+            Debug.Log("Network Agent Received from backend: " + e.Data);
+
+            if (e.Data == "40")
+                return;
+
             MessageArgs args = new MessageArgs() {
                 messageType = extractMessageType(e.Data),
                 messageData = extractMessageData(e.Data)
@@ -126,8 +176,11 @@ namespace NetworkWrapper {
             if (args.messageType == "sid" || args.messageType == "")
                 return;
 
-            Debug.Log("Network Agent Received from backend: " + args.messageData);
-            EventManager.Instance.triggerEvent("ReceiveMessageFromServer", args);
+            mutex.WaitOne();
+            messageQueue.Add(args);
+            mutex.ReleaseMutex();
+
+            //EventManager.Instance.triggerEvent("ReceiveMessageFromServer", args);
         }
 
         private string extractMessageType(string socketIOMessage) {

@@ -13,7 +13,7 @@ public class EventGeneratorTest : MonoBehaviour {
 
     void Start() {
 
-        EventManagement.EventManager.Instance.registerCallbackForEvent("connectToServer", onConnectToServer);
+        EventManagement.EventManager.Instance.registerCallbackForEvent("connectToBackend", onConnectToServer);
 
         EventManagement.EventManager.Instance.registerCallbackForEvent("startPlayerTurn",
             (System.EventArgs e) => {
@@ -43,7 +43,6 @@ public class EventGeneratorTest : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.A)) {
             EventManagement.EventManager.Instance.triggerEvent("StartConnectionToServer", new NetworkWrapper.StartConnectionToServerArgs() { url = local });
-            EventManagement.EventManager.Instance.triggerEvent("connectToServer/accept", new ConnectToServerAcceptArgs { playerName = "nemesh", webClientSocketId = "id1" });
         }
 
         if (Input.GetKeyDown(KeyCode.S)) {

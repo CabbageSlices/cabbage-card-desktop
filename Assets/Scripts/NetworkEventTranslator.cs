@@ -5,14 +5,14 @@ using System;
 using Newtonsoft.Json;
 using EventManagement;
 using NetworkWrapper;
-using System.Runtime.CompilerServices;
 
 public class NetworkEventTranslator : MonoBehaviour {
 
     Dictionary<string, Type> backendEventTypeToArgs = new Dictionary<string, Type>(StringComparer.InvariantCultureIgnoreCase) {
         { "generateRoomCode", typeof(GenerateRoomCodeArgs) },
         { "connectToServer", typeof(ConnectToServerArgs) },
-        { "webClientDisconnect", typeof(WebClientDisconnectArgs) }
+        { "webClientDisconnect", typeof(WebClientDisconnectArgs) },
+        { "connectToBackend", typeof(EventArgs)}
     };
 
     Dictionary<string, Type> unityEventTypeToArgs = new Dictionary<string, Type>(StringComparer.InvariantCultureIgnoreCase) {
@@ -44,12 +44,17 @@ public class NetworkEventTranslator : MonoBehaviour {
     void onReceiveMessageFromServer(EventArgs e) {
 
         MessageArgs args = (MessageArgs)e;
+        
+        if(!backendEventTypeToArgs.ContainsKey(args.messageType)) {
+            Debug.Log("BACKEND EVENT: " + args.messageType + " CANNOT BE TRANSLATED");
+            return;
+        }
 
         Type type = backendEventTypeToArgs[args.messageType];
     
         object serverArgs = JsonConvert.DeserializeObject(args.messageData, type);
         var data = Convert.ChangeType(serverArgs, type);
-
+        
         EventManager.Instance.triggerEvent(args.messageType, (EventArgs)data);
     }
 }

@@ -26,7 +26,7 @@ public class PlayerTurnManagerEventManger : MonoBehaviour {
 
     public void onPlayerEndTurn(EventArgs e) {
 
-        EndTurnArgs args = (EndTurnArgs) e;
+        //EndTurnArgs args = (EndTurnArgs) e;
         string idNextPlayer = turnManager.startNextPlayerTurn();
 
         triggerStartTurnEvent(idNextPlayer);

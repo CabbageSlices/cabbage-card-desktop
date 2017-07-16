@@ -61,8 +61,12 @@ namespace EventManagement {
 
             eventType = eventType.ToLower();
 
-            if (Instance.eventCallbacks.ContainsKey(eventType) && Instance.eventCallbacks[eventType] != null)
+            if (Instance.eventCallbacks.ContainsKey(eventType) && Instance.eventCallbacks[eventType] != null) {
+                //Debug.Log("triggered event " + eventType + " with a response");
                 Instance.eventCallbacks[eventType](args);
+            } else {
+                //Debug.Log("triggered event " + eventType + "  WITHOUT a response");
+            }
         }
 
         private EventManager() {

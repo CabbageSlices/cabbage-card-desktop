@@ -11,5 +11,13 @@ public class GameController : MonoBehaviour {
 
     State state = State.AWAITING_CONNECTION;
 
-    
+    string roomCode;
+
+    public void setRoomCode(string _roomCode) {
+        roomCode = _roomCode;
+    }
+
+    public bool isAwaitingConnection() {
+        return state == State.AWAITING_CONNECTION;
+    }
 }

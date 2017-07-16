@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 using EventManagement;
 
-//[RequireComponent(typeof(GameController))]
+[RequireComponent(typeof(GameController))]
 public class GameControllerEventManager : MonoBehaviour {
 
     public GameController controller;
@@ -14,20 +14,45 @@ public class GameControllerEventManager : MonoBehaviour {
 
         if(controller == null)
             controller = GetComponent<GameController>();
+
         subscribeToEvents();
 	}
 
     void subscribeToEvents() {
 
         EventManager.Instance.registerCallbackForEvent("generateRoomCode", onGenerateRoomCode);
+        EventManager.Instance.registerCallbackForEvent("connectToServer", onWebConnectionRequest);
+        EventManager.Instance.registerCallbackForEvent("webClientDisconnect", onWebClientDisconnect);
+
     }
-	
-	void onGenerateRoomCode(EventArgs e) {
+
+    void onGenerateRoomCode(EventArgs e) {
         GenerateRoomCodeArgs args = (GenerateRoomCodeArgs)e;
 
-        //controller.setRoomCode(args.roomCode);
+        //Debug.Log(args.roomCode);
+        controller.setRoomCode(args.roomCode);
         EventManager.Instance.triggerEvent("setRoomCode", new SetRoomCodeArgs { roomCode = args.roomCode });
     }
 
+    void onWebConnectionRequest(EventArgs e) {
 
+        ConnectToServerArgs args = (ConnectToServerArgs)e;
+
+        if(!controller.isAwaitingConnection()) {
+            EventManager.Instance.triggerEvent("connectToServer/reject", new ConnectToServerRejectArgs 
+                { playerName = args.playerName, webClientSocketId = args.webClientSocketId, message = "Game is already in session." });
+            return;
+        }
+
+        EventManager.Instance.triggerEvent("connectToServer/accept", new ConnectToServerAcceptArgs 
+            { playerName = args.playerName, webClientSocketId = args.webClientSocketId });
+
+        EventManager.Instance.triggerEvent("playerConnected", args);
+    }
+
+    void onWebClientDisconnect(EventArgs e) {
+        WebClientDisconnectArgs args = (WebClientDisconnectArgs)e;
+
+        EventManager.Instance.triggerEvent("playerDisconnected", args);
+    }
 }

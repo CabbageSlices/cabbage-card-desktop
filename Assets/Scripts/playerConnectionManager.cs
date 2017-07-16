@@ -6,7 +6,7 @@ using UnityEngine;
 /// Class that keeps track of all the  connected players
 /// Accepts new connecetions and handles connection requests
 /// </summary>
-public class playerConnectionManager : MonoBehaviour {
+public class PlayerConnectionManager : MonoBehaviour {
 
 	public GameObject connectPlayer(string playerName, string websocketId) {
         //check if the given player exists yet

@@ -7,7 +7,7 @@ using UnityEngine;
 /// </summary>
 public class PlayerInfo : MonoBehaviour {
 
-    private static int NumPlayers = 0;
+    //private static int NumPlayers = 0;
     private string _playerId;
 
     public string playerName;

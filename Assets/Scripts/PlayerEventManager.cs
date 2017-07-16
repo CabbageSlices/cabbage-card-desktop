@@ -78,8 +78,8 @@ public class PlayerEventManager : MonoBehaviour {
     }
 
     public void onDiscardForRandomDraw(EventArgs e) {
-        SelectCardsArgs args = (SelectCardsArgs)e;
-        List<GameObject> cards = playerHand.removeCards(args.cards);
+        //SelectCardsArgs args = (SelectCardsArgs)e;
+        //List<GameObject> cards = playerHand.removeCards(args.cards);
 
         CardRandomDrawEffect randomDraw = gameObject.AddComponent<CardRandomDrawEffect>();
         randomDraw.onComplete = () => Destroy(randomDraw);
