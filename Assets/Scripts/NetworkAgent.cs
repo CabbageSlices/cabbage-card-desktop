@@ -67,6 +67,7 @@ namespace NetworkWrapper {
             EventManager.Instance.registerCallbackForEvent("StartConnectionToServer", connect);
             EventManager.Instance.registerCallbackForEvent("EndConnectionToServer", disconnect);
             EventManager.Instance.registerCallbackForEvent("sendMessageToServer", sendMessage);
+            EventManager.Instance.registerCallbackForEvent("connectToBackend", (EventArgs) => StartCoroutine("sendHeartbeat"));
         }
 
         /// <summary>
@@ -89,7 +90,6 @@ namespace NetworkWrapper {
             socket.OnClose += onClose;
             
             socket.ConnectAsync();
-            StartCoroutine("sendHeartbeat");
         }
 
         /// <summary>
@@ -125,12 +125,10 @@ namespace NetworkWrapper {
 
         IEnumerator sendHeartbeat() {
 
-            while(true) {
-
-                if(socket.IsAlive) {
-                    string toSend = "2";
-                    socket.Send(toSend);
-                }
+            while(socket.IsAlive) {
+                
+                string toSend = "2";
+                socket.Send(toSend);
 
                 yield return new WaitForSeconds(heartbeatDelay);
             }
