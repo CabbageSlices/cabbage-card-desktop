@@ -9,7 +9,7 @@ public class EventGeneratorTest : MonoBehaviour {
     public List<int> _cards = new List<int>();
 
     const string remote = "wss://exploding-kittens-backend.herokuapp.com/";
-    const string local = "ws://localhost:8000/";
+    const string local = "ws://localhost:3000/";
 
     void Start() {
 
@@ -42,7 +42,7 @@ public class EventGeneratorTest : MonoBehaviour {
     void Update() {
 
         if (Input.GetKeyDown(KeyCode.A)) {
-            EventManagement.EventManager.Instance.triggerEvent("StartConnectionToServer", new NetworkWrapper.StartConnectionToServerArgs() { url = local });
+            EventManagement.EventManager.Instance.triggerEvent("StartConnectionToServer", new NetworkWrapper.StartConnectionToServerArgs() { url = remote });
         }
 
         if (Input.GetKeyDown(KeyCode.S)) {
