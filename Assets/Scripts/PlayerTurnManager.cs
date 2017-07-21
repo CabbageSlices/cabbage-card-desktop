@@ -22,7 +22,10 @@ public class PlayerTurnManager : MonoBehaviour {
     private int indexNextPlayer;
 
     private void Start() {
+        
+    }
 
+    public void startGame() {
         indexCurrentPlayer = 0;
         indexNextPlayer = calculateIndexNextPlayer();
     }

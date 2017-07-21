@@ -12,7 +12,8 @@ public class NetworkEventTranslator : MonoBehaviour {
         { "generateRoomCode", typeof(GenerateRoomCodeArgs) },
         { "connectToServer", typeof(ConnectToServerArgs) },
         { "webClientDisconnect", typeof(WebClientDisconnectArgs) },
-        { "connectToBackend", typeof(EventArgs)}
+        { "connectToBackend", typeof(EventArgs)},
+        { "networkError", typeof(NetworkErrorArgs)}
     };
 
     Dictionary<string, Type> unityEventTypeToArgs = new Dictionary<string, Type>(StringComparer.InvariantCultureIgnoreCase) {

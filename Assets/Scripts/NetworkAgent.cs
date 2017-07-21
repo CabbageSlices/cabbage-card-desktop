@@ -105,7 +105,16 @@ namespace NetworkWrapper {
         }
 
         public void onError(object sender, ErrorEventArgs e) {
-            EventManager.Instance.triggerEvent("networkError", new NetworkErrorArgs { errorMesssage = e.Message });
+            
+            MessageArgs args = new MessageArgs() {
+                messageType = "networkError",
+                messageData = "{\'message\': \'" + e.Message + "\'}"
+            };
+
+            Debug.Log(e.Message);
+            mutex.WaitOne();
+            messageQueue.Add(args);
+            mutex.ReleaseMutex();
         }
 
         public void onClose(object sender, CloseEventArgs e) {
@@ -160,11 +169,10 @@ namespace NetworkWrapper {
         /// <param name="e"></param>
         private void onMessage(object sender, MessageEventArgs e) {
 
-            Debug.Log("Network Agent Received from backend: " + e.Data);
-
+            //Debug.Log("Network Agent Received from backend1: " + e.Data);
             if (e.Data == "40")
                 return;
-
+            
             MessageArgs args = new MessageArgs() {
                 messageType = extractMessageType(e.Data),
                 messageData = extractMessageData(e.Data)
@@ -173,12 +181,10 @@ namespace NetworkWrapper {
             //ignore the session id message
             if (args.messageType == "sid" || args.messageType == "")
                 return;
-
+            
             mutex.WaitOne();
             messageQueue.Add(args);
             mutex.ReleaseMutex();
-
-            //EventManager.Instance.triggerEvent("ReceiveMessageFromServer", args);
         }
 
         private string extractMessageType(string socketIOMessage) {
@@ -189,7 +195,15 @@ namespace NetworkWrapper {
             int posSecondQuote = socketIOMessage.IndexOf('\"', posFirstQuote + 1);
 
             //return the message without surrounding quotes
-            return socketIOMessage.Substring(posFirstQuote + 1, posSecondQuote - posFirstQuote - 1);
+            string extractedData = "";
+
+            try {
+                extractedData = socketIOMessage.Substring(posFirstQuote + 1, posSecondQuote - posFirstQuote - 1);
+            } catch {
+                extractedData = "";
+            }
+
+            return extractedData;
         }
 
         private string extractMessageData(string socketIOMessage) {
@@ -203,8 +217,17 @@ namespace NetworkWrapper {
             int posStartBrace = socketIOMessage.IndexOf('{');
             int posEndBrace = socketIOMessage.LastIndexOf('}');
 
+            string extractedData = "";
+
+            try {
+                extractedData = socketIOMessage.Substring(posStartBrace, posEndBrace - posStartBrace + 1);
+            } catch {
+                extractedData = "";
+            }
+
+            return extractedData;
             //return the object including the { and }
-            return socketIOMessage.Substring(posStartBrace, posEndBrace - posStartBrace + 1);
+            //return socketIOMessage.Substring(posStartBrace, posEndBrace - posStartBrace + 1);
         }
     }
 }
