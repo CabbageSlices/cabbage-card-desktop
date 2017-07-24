@@ -52,6 +52,7 @@ public class NetworkEventTranslator : MonoBehaviour {
         }
 
         Type type = backendEventTypeToArgs[args.messageType];
+        Debug.Log(args.messageData);
     
         object serverArgs = JsonConvert.DeserializeObject(args.messageData, type);
         var data = Convert.ChangeType(serverArgs, type);

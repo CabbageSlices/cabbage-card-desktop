@@ -47,13 +47,13 @@ namespace NetworkWrapper {
         private void Update() {
             
             mutex.WaitOne();
-
-            foreach(MessageArgs args in messageQueue) {
+            
+            foreach (MessageArgs args in messageQueue) {
+                Debug.Log("TRIGGERING: " + args.messageType);
                 EventManager.Instance.triggerEvent("ReceiveMessageFromServer", args);
             }
             
             messageQueue.Clear();
-
             mutex.ReleaseMutex();
         }
 
@@ -181,7 +181,8 @@ namespace NetworkWrapper {
             //ignore the session id message
             if (args.messageType == "sid" || args.messageType == "")
                 return;
-            
+
+            Debug.Log("Network Agent Received from backend1: " + args.messageData);
             mutex.WaitOne();
             messageQueue.Add(args);
             mutex.ReleaseMutex();

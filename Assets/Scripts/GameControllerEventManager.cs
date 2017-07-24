@@ -23,7 +23,7 @@ public class GameControllerEventManager : MonoBehaviour {
         EventManager.Instance.registerCallbackForEvent("generateRoomCode", onGenerateRoomCode);
         EventManager.Instance.registerCallbackForEvent("connectToServer", onWebConnectionRequest);
         EventManager.Instance.registerCallbackForEvent("webClientDisconnect", onWebClientDisconnect);
-
+        EventManager.Instance.registerCallbackForEvent("startGame", onStartGame);
     }
 
     void onGenerateRoomCode(EventArgs e) {
@@ -54,5 +54,16 @@ public class GameControllerEventManager : MonoBehaviour {
         WebClientDisconnectArgs args = (WebClientDisconnectArgs)e;
 
         EventManager.Instance.triggerEvent("playerDisconnected", args);
+    }
+
+    public void onStartGame(EventArgs e) {
+
+        //createDeck();
+        //dealCards();
+        //hideConnectionScreen();
+        //positionPlayerUi();
+        //positionDeck();
+        //determineStartingPlayer();
+        
     }
 }
