@@ -8,21 +8,25 @@ using EventManagement;
 public class GameControllerEventManager : MonoBehaviour {
 
     public GameController controller;
+    public PlayerConnectionManager connectionManager;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
 
         if(controller == null)
             controller = GetComponent<GameController>();
+
+        if (connectionManager == null) 
+            connectionManager = GameObject.FindGameObjectWithTag("PlayerManager").GetComponent<PlayerConnectionManager>();
 
         subscribeToEvents();
 	}
 
     void subscribeToEvents() {
 
-        EventManager.Instance.registerCallbackForEvent("generateRoomCode", onGenerateRoomCode);
-        EventManager.Instance.registerCallbackForEvent("connectToServer", onWebConnectionRequest);
-        EventManager.Instance.registerCallbackForEvent("webClientDisconnect", onWebClientDisconnect);
+        EventManager.Instance.registerCallbackForEvent("backend/generateRoomCode", onGenerateRoomCode);
+        EventManager.Instance.registerCallbackForEvent("backend/connectToServer", onWebConnectionRequest);
+        EventManager.Instance.registerCallbackForEvent("backend/webClientDisconnect", onWebClientDisconnect);
         EventManager.Instance.registerCallbackForEvent("startGame", onStartGame);
     }
 
@@ -39,13 +43,21 @@ public class GameControllerEventManager : MonoBehaviour {
         ConnectToServerArgs args = (ConnectToServerArgs)e;
 
         if(!controller.isAwaitingConnection()) {
-            EventManager.Instance.triggerEvent("connectToServer/reject", new ConnectToServerRejectArgs 
+            EventManager.Instance.triggerEvent("backend/connectToServer/reject", new ConnectToServerRejectArgs 
                 { playerName = args.playerName, webClientSocketId = args.webClientSocketId, message = "Game is already in session." });
             return;
         }
 
-        EventManager.Instance.triggerEvent("connectToServer/accept", new ConnectToServerAcceptArgs 
-            { playerName = args.playerName, webClientSocketId = args.webClientSocketId });
+        if(connectionManager.isNameTaken(args.playerName, args.webClientSocketId)) {
+            EventManager.Instance.triggerEvent("backend/connectToServer/reject",
+               new ConnectToServerRejectArgs { playerName = args.playerName, webClientSocketId = args.webClientSocketId, message = "The name is already taken." });
+            return;
+        }
+        
+        var connectedPlayers = connectionManager.getConnectedPlayerNames();
+
+        EventManager.Instance.triggerEvent("backend/connectToServer/accept", new ConnectToServerAcceptArgs 
+            { playerName = args.playerName, webClientSocketId = args.webClientSocketId, connectedPlayers = connectedPlayers });
 
         EventManager.Instance.triggerEvent("playerConnected", args);
     }

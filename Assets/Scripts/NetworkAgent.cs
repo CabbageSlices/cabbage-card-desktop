@@ -49,7 +49,6 @@ namespace NetworkWrapper {
             mutex.WaitOne();
             
             foreach (MessageArgs args in messageQueue) {
-                Debug.Log("TRIGGERING: " + args.messageType);
                 EventManager.Instance.triggerEvent("ReceiveMessageFromServer", args);
             }
             
@@ -117,7 +116,8 @@ namespace NetworkWrapper {
             mutex.ReleaseMutex();
         }
 
-        public void onClose(object sender, CloseEventArgs e) {
+        private void onClose(object sender, CloseEventArgs e) {
+            Debug.Log("ConnectionClosed" + e.Reason);
             EventManager.Instance.triggerEvent("connectionClosed", new ConnectionClosedArgs { message = e.Reason });
         }
 
@@ -125,28 +125,11 @@ namespace NetworkWrapper {
         /// Send a message to the server if connected
         /// </summary>
         /// <param name="e">Event argument to send, must be of type MessageArgs</param>
-        public void sendMessage(EventArgs e) {
+        private void sendMessage(EventArgs e) {
             MessageArgs args = e as MessageArgs;
 
             string toSend = convertToSocketIoMessage(args.messageType, args.messageData);
             socket.Send(toSend);
-        }
-
-        IEnumerator sendHeartbeat() {
-
-            while(socket.IsAlive) {
-                
-                string toSend = "2";
-                socket.Send(toSend);
-
-                yield return new WaitForSeconds(heartbeatDelay);
-            }
-        }
-
-        private string convertToSocketIoMessage(string messageType, string messageDataJson) {
-
-            //formatted to socket.io protocal
-            return "42[\"" + messageType + "\"," + messageDataJson + "]";
         }
 
         private void onOpen(object sender, EventArgs e) {
@@ -172,7 +155,7 @@ namespace NetworkWrapper {
             //Debug.Log("Network Agent Received from backend1: " + e.Data);
             if (e.Data == "40")
                 return;
-            
+
             MessageArgs args = new MessageArgs() {
                 messageType = extractMessageType(e.Data),
                 messageData = extractMessageData(e.Data)
@@ -182,10 +165,29 @@ namespace NetworkWrapper {
             if (args.messageType == "sid" || args.messageType == "")
                 return;
 
-            Debug.Log("Network Agent Received from backend1: " + args.messageData);
+            Debug.Log("Network Agent Received from backend1: " + e.Data);
+            args.messageType = "backend/" + args.messageType;
             mutex.WaitOne();
             messageQueue.Add(args);
             mutex.ReleaseMutex();
+        }
+
+
+        IEnumerator sendHeartbeat() {
+
+            while(socket.IsAlive) {
+                
+                string toSend = "2";
+                socket.Send(toSend);
+
+                yield return new WaitForSeconds(heartbeatDelay);
+            }
+        }
+
+        private string convertToSocketIoMessage(string messageType, string messageDataJson) {
+
+            //formatted to socket.io protocal
+            return "42[\"" + messageType + "\"," + messageDataJson + "]";
         }
 
         private string extractMessageType(string socketIOMessage) {

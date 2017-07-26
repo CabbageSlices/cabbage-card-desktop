@@ -83,6 +83,7 @@ public class ConnectToServerArgs : EventArgs {
 public class ConnectToServerAcceptArgs : EventArgs {
     public string playerName;
     public string webClientSocketId;
+    public List<string> connectedPlayers;
 }
 
 public class ConnectToServerRejectArgs : EventArgs {
@@ -93,4 +94,14 @@ public class ConnectToServerRejectArgs : EventArgs {
 
 public class WebClientDisconnectArgs : EventArgs {
     public string webClientSocketId;
+}
+
+public class WebPlayerConnectedArgs : EventArgs {
+    public string playerName;
+    public List<string> messageTargets;
+}
+
+public class WebPlayerDisconnectedArgs : EventArgs {
+    public string playerName;
+    public List<string> messageTargets;
 }

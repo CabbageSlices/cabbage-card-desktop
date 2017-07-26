@@ -23,12 +23,22 @@ public class PlayerConnectionEventManager : MonoBehaviour {
     }
 
     void onPlayerConnected(EventArgs e) {
+
+        var otherPlayers = connectionManager.getConnectedPlayerIds();
+
         ConnectToServerArgs args = (ConnectToServerArgs)e;
         connectionManager.connectPlayer(args.playerName, args.webClientSocketId);
+
+        EventManager.Instance.triggerEvent("web/playerConnected", new WebPlayerConnectedArgs { messageTargets = otherPlayers, playerName = args.playerName });
     }
 
     void onPlayerDisconnected(EventArgs e) {
         WebClientDisconnectArgs args = (WebClientDisconnectArgs)e;
+        
+        string playerName = connectionManager.getPlayerById(args.webClientSocketId).playerName;
         connectionManager.disconnectPlayer(args.webClientSocketId);
+
+        var otherPlayers = connectionManager.getConnectedPlayerIds();
+        EventManager.Instance.triggerEvent("web/playerDisconnected", new WebPlayerDisconnectedArgs { messageTargets = otherPlayers, playerName = playerName });
     }
 }
