@@ -38,6 +38,9 @@ public class PlayerEventManager : MonoBehaviour {
         EventManager.Instance.registerCallbackForEvent("discardForRandomDraw/" + playerInfo.playerId, onDiscardForRandomDraw);
         EventManager.Instance.registerCallbackForEvent("giveupRandomCard/" + playerInfo.playerId, onGiveupRandomCard);
         EventManager.Instance.registerCallbackForEvent("receiveCard/" + playerInfo.playerId, onReceiveCard);
+        EventManager.Instance.registerCallbackForEvent("getStartingHand/done/" + playerInfo.playerId, onGetStartingHandDone);
+        EventManager.Instance.registerCallbackForEvent("notifyGameStarted", onNotifyGameStarted);
+        EventManager.Instance.registerCallbackForEvent("drawStartingHand", onDrawStartingHand);
     }
 
     public void onDrawSafeResponse(EventArgs e) {
@@ -95,5 +98,25 @@ public class PlayerEventManager : MonoBehaviour {
     public void onReceiveCard(EventArgs e) {
         ReceiveCardArgs args = (ReceiveCardArgs)e;
         playerHand.addCard(args.card);
+    }
+
+    public void onDrawStartingHand(EventArgs e) {
+        DrawStartingHandArgs args = (DrawStartingHandArgs)e;
+
+        Debug.Log("Drawing");
+        EventManager.Instance.triggerEvent("getStartingHand", new GetStartingHandArgs { numCards = args.numCards, playerId = playerInfo.playerId });
+    }
+
+    public void onGetStartingHandDone(EventArgs e) {
+        GetStartingHandResponseArgs args = (GetStartingHandResponseArgs)e;
+        Debug.Log("saving starting hand");
+        playerHand.addCards(args.cards);
+    }
+
+    public void onNotifyGameStarted(EventArgs e) {
+
+        WebGameStartArgs args = new WebGameStartArgs { cards = playerHand.cardIds, messageTarget = playerInfo.playerId};
+
+        EventManager.Instance.triggerEvent("web/gameStart", args);
     }
 }

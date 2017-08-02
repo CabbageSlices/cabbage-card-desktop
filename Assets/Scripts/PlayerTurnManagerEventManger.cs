@@ -22,6 +22,7 @@ public class PlayerTurnManagerEventManger : MonoBehaviour {
     void subscribeToEvents() {
         EventManager.Instance.registerCallbackForEvent("endPlayerTurn", onPlayerEndTurn);
         EventManager.Instance.registerCallbackForEvent("playerDeath", onPlayerDeath);
+        EventManager.Instance.registerCallbackForEvent("startFirstPlayerTurn", onStartFirstPlayerTurn);
     }
 
     public void onPlayerEndTurn(EventArgs e) {
@@ -29,7 +30,7 @@ public class PlayerTurnManagerEventManger : MonoBehaviour {
         //EndTurnArgs args = (EndTurnArgs) e;
         string idNextPlayer = turnManager.startNextPlayerTurn();
 
-        triggerStartTurnEvent(idNextPlayer);
+        triggerStartTurnEvent(idNextPlayer, turnManager.getNameCurrentPlayer());
     }
 
     public void onPlayerDeath(EventArgs e) {
@@ -39,9 +40,15 @@ public class PlayerTurnManagerEventManger : MonoBehaviour {
         turnManager.onPlayerDeath(args.playerId);
     }
 
-    private void triggerStartTurnEvent(string playerId) {
+    public void onStartFirstPlayerTurn(EventArgs e) {
+        triggerStartTurnEvent(turnManager.getIdCurrentPlayer(), turnManager.getNameCurrentPlayer());
+    }
+
+    private void triggerStartTurnEvent(string playerId, string playerName) {
 
         EventManager.Instance.triggerEvent("startPlayerTurn/" + playerId, new StartTurnArgs() { playerId = playerId });
         EventManager.Instance.triggerEvent("startPlayerTurn", new StartTurnArgs() { playerId = playerId });
+        EventManager.Instance.triggerEvent("web/startTurn", new WebStartTurnArgs() { playerName = playerName, messageTargets = "all" });
     }
+
 }

@@ -9,6 +9,8 @@ public class GameControllerEventManager : MonoBehaviour {
 
     public GameController controller;
     public PlayerConnectionManager connectionManager;
+    public PlayerTurnManager turnManager;
+    public Deck deck;
 
     // Use this for initialization
     void Start () {
@@ -18,6 +20,12 @@ public class GameControllerEventManager : MonoBehaviour {
 
         if (connectionManager == null) 
             connectionManager = GameObject.FindGameObjectWithTag("PlayerManager").GetComponent<PlayerConnectionManager>();
+
+        if(deck == null)
+            deck = GameObject.FindGameObjectWithTag("Deck").GetComponent<Deck>();
+
+        if(turnManager == null)
+            turnManager = GameObject.FindGameObjectWithTag("PlayerManager").GetComponent<PlayerTurnManager>();
 
         subscribeToEvents();
 	}
@@ -68,7 +76,19 @@ public class GameControllerEventManager : MonoBehaviour {
         EventManager.Instance.triggerEvent("playerDisconnected", args);
     }
 
-    public void onStartGame(EventArgs e) {
+    void onStartGame(EventArgs e) {
+
+        //controller.startGame();
+        deck.generate();
+        EventManager.Instance.triggerEvent("drawStartingHand", new DrawStartingHandArgs { numCards = 5 });
+        deck.shuffle(false);
+
+        EventManager.Instance.triggerEvent("notifyGameStarted", new EventArgs());
+
+        EventManager.Instance.triggerEvent("startFirstPlayerTurn", new EventArgs());
+    }
+
+    //public void onStartGame(EventArgs e) {
 
         //createDeck();
         //dealCards();
@@ -77,5 +97,5 @@ public class GameControllerEventManager : MonoBehaviour {
         //positionDeck();
         //determineStartingPlayer();
         
-    }
+    //}
 }

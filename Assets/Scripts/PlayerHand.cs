@@ -10,6 +10,29 @@ using System.Linq;
 /// </summary>
 public class PlayerHand : MonoBehaviour {
 
+    public List<GameObject> cards {
+        get {
+
+            List<GameObject> cards = new List<GameObject>();
+            foreach (Transform card in transform) {
+
+                cards.Add(card.gameObject);
+            }
+
+            return cards;
+        }
+    }
+
+    public List<string> cardIds {
+        get {
+
+            List<GameObject> cardObjects = cards;
+            
+            return (from card in cardObjects
+            select card.GetComponent<CardInfo>().cardId).ToList();
+        }
+    }
+
     /// <summary>
     /// Add the given card to the  player's hand
     /// </summary>
@@ -22,12 +45,19 @@ public class PlayerHand : MonoBehaviour {
         card.SetActive(false);
     }
 
+    public void addCards(List<GameObject> cards) {
+
+        foreach(var card in cards) {
+            addCard(card);
+        }
+    }
+
     /// <summary>
     /// Remove the card with the given ID from the player's hand. returns the removed  card, or Null if the player doesn't have the card
     /// </summary>
     /// <param name="index">ID of the card to remove</param>
     /// <returns>The card that was removed from the hand. Null if the card doesn't exist</returns>
-    public GameObject removeCard(int cardId) {
+    public GameObject removeCard(string cardId) {
         GameObject toRemove = null;
         foreach(Transform card in transform) {
 
@@ -46,7 +76,7 @@ public class PlayerHand : MonoBehaviour {
     /// </summary>
     /// <param name="cardIds">array of ids to remove</param>
     /// <returns></returns>
-    public List<GameObject> removeCards(int[] cardIds) {
+    public List<GameObject> removeCards(string[] cardIds) {
         
         List<GameObject> removed = new List<GameObject>();
         foreach (Transform card in transform) {
@@ -75,7 +105,7 @@ public class PlayerHand : MonoBehaviour {
     /// </summary>
     /// <param name="cardName">name of the card to remove</param>
     /// <returns>The card that was removed from the hand. Null if the card doesn't exist</returns>
-    public GameObject removeCard(string cardName) {
+    public GameObject removeCardById(string cardName) {
         GameObject toRemove = null;
         foreach (Transform card in transform) {
 

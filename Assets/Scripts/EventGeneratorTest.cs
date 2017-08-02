@@ -49,6 +49,10 @@ public class EventGeneratorTest : MonoBehaviour {
             EventManagement.EventManager.Instance.triggerEvent("EndConnectionToServer", null);
         }
 
+        if (Input.GetKeyDown(KeyCode.D)) {
+            EventManagement.EventManager.Instance.triggerEvent("startGame", null);
+        }
+
         if (Input.GetKeyDown(KeyCode.Z)) {
             EventManagement.EventManager.Instance.triggerEvent("ShuffleDeck", null);
         }
@@ -58,11 +62,11 @@ public class EventGeneratorTest : MonoBehaviour {
         }
 
         if (Input.GetKeyDown(KeyCode.C)) {
-            EventManagement.EventManager.Instance.triggerEvent("useCardEffect/" + _playerId, new CardEffectUseArgs { cardID = 272 });
+           // EventManagement.EventManager.Instance.triggerEvent("useCardEffect/" + _playerId, new CardEffectUseArgs { cardID = 272 });
         }
 
         if (Input.GetKeyDown(KeyCode.V)) {
-            EventManagement.EventManager.Instance.triggerEvent("discardForRandomDraw/" + _playerId, new SelectCardsArgs() { cards = _cards.ToArray() });
+            //EventManagement.EventManager.Instance.triggerEvent("discardForRandomDraw/" + _playerId, new SelectCardsArgs() { cards = _cards.ToArray() });
         }
 
         if (Input.GetKeyDown(KeyCode.B)) {

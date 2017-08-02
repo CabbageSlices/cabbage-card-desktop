@@ -153,6 +153,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ed9c7f83fd915b4eb782ad10635973f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _cardId: 3
   cardName: c1
 --- !u!114 &114518789526888950
 MonoBehaviour:

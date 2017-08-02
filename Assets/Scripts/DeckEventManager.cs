@@ -25,11 +25,12 @@ public class DeckEventManager : MonoBehaviour {
 
         EventManager.Instance.registerCallbackForEvent("ShuffleDeck", onShuffleDeck);
         EventManager.Instance.registerCallbackForEvent("DrawCard", onDrawCard);
+        EventManager.Instance.registerCallbackForEvent("getStartingHand", onGetStartingHand);
     }
 	
 	public void onShuffleDeck(EventArgs e) {
         
-        deck.shuffle( () => { EventManager.Instance.triggerEvent("ShuffleDeck/done", e); } );
+        deck.shuffle(true, () => { EventManager.Instance.triggerEvent("ShuffleDeck/done", e); } );
     }
 
     public void onDrawCard(EventArgs e) {
@@ -40,5 +41,14 @@ public class DeckEventManager : MonoBehaviour {
         //evaluate card
         //send to game controller to send to player (or send directly)
         //OR allow card to determine how it handles a draw
+    }
+
+    public void onGetStartingHand(EventArgs e) {
+        GetStartingHandArgs args = (GetStartingHandArgs)e;
+
+        var cards = deck.drawSafeCards(args.numCards);
+        
+        Debug.Log("returning hand" + cards.Count + "   " + args.numCards);
+        EventManager.Instance.triggerEvent("getStartingHand/done/" + args.playerId, new GetStartingHandResponseArgs { cards = cards });
     }
 }

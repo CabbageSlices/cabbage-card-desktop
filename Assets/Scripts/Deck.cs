@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 /// <summary>
 /// Represents a deck of cards and provides functions that you'd execpt a deck of cards to be able to do
@@ -9,6 +10,19 @@ using UnityEngine;
 public class Deck : MonoBehaviour {
 
     public delegate void ActionCompleteCallback();
+
+    public List<GameObject> cardPrefabs;
+
+    public List<GameObject> cards {
+        get {
+            List<GameObject> cards = new List<GameObject>();
+
+            foreach(Transform child in transform)
+                cards.Add(child.gameObject);
+
+            return cards;
+        }
+    }
 
 	// Use this for initialization
 	void Start () {
@@ -46,12 +60,8 @@ public class Deck : MonoBehaviour {
         if (transform.GetChild(position) != null)
             transform.GetChild(position).gameObject.SetActive(true);
     }
-
-    /// <summary>
-    /// Shuffle the deck randomly 
-    /// </summary>
-    /// <param name="callback">function to call when the shuffle animation completes</param>
-    public void shuffle(ActionCompleteCallback callback) {
+    
+    public void shuffle(bool shouldPlayAnimation, ActionCompleteCallback callback = null) {
         
         for(int child = 0; child < transform.childCount - 1; ++child) {
             
@@ -65,8 +75,11 @@ public class Deck : MonoBehaviour {
         renderNoCards();
         renderCard(0);
 
+        //if(shouldPlayAnimation)
+            //play animation here
+
         //wwhen shuffle animation completes
-        callback();
+        //callback();
     }
 
     /// <summary>
@@ -133,6 +146,39 @@ public class Deck : MonoBehaviour {
 
         activateCards(cards);
         return cards;
+    }
+
+    public List<GameObject> drawSafeCards(int count) {
+
+        List<GameObject> cards = new List<GameObject>();
+
+        for(int i = 0; i < transform.childCount && i < count;) {
+
+            var child = transform.GetChild(i).gameObject;
+            var info = child.GetComponent<CardInfo>();
+
+            if(info.type == CardInfo.CardType.BOMB) {
+                ++i;
+                continue;
+            }
+
+            cards.Add(child);
+            child.transform.SetParent(null);
+        }
+
+        return cards;
+    }
+
+    public void generate() {
+        
+        foreach(var prefab in cardPrefabs) {
+
+            for(int i = 0; i < 5; ++i) {
+                GameObject card = GameObject.Instantiate(prefab);
+                card.transform.SetParent(transform);
+                card.transform.localPosition = new Vector3();
+            }
+        }
     }
 
     public void insertCards(int position, List<string> cardNames) {

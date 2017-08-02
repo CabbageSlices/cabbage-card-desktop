@@ -18,13 +18,15 @@ public class NetworkEventTranslator : MonoBehaviour {
     };
 
     Dictionary<string, Type> unityBackendEventTypeToArgs = new Dictionary<string, Type>(StringComparer.InvariantCultureIgnoreCase) {
-        { "backend/connectToServer/accept", typeof(GenerateRoomCodeArgs) },
-        { "backend/connectToServer/reject", typeof(ConnectToServerArgs) }
+        { "backend/connectToServer/accept", typeof(ConnectToServerAcceptArgs) },
+        { "backend/connectToServer/reject", typeof(ConnectToServerRejectArgs) }
     };
 
     Dictionary<string, Type> unityWebEventTypeToArgs = new Dictionary<string, Type>(StringComparer.InvariantCultureIgnoreCase) {
         { "web/playerConnected", typeof(WebPlayerConnectedArgs) },
-        { "web/playerDisconnected", typeof(WebPlayerDisconnectedArgs) }
+        { "web/playerDisconnected", typeof(WebPlayerDisconnectedArgs) },
+        { "web/gameStart", typeof(WebGameStartArgs) },
+        { "web/startTurn", typeof(WebStartTurnArgs) }
     };
 
     // Use this for initialization

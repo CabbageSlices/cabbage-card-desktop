@@ -14,7 +14,7 @@ public class DrawCardResponseArgs : System.EventArgs {
 /// arguments for when player chooses to use a card effect
 /// </summary>
 public class CardEffectUseArgs : System.EventArgs {
-    public int cardID;///<Remark>id of the card to use</Remark>
+    public string cardID;///<Remark>id of the card to use</Remark>
 }
 
 public  class EndTurnArgs : System.EventArgs {
@@ -30,7 +30,7 @@ public class PlayerDeathArgs : System.EventArgs {
 }
 
 public class SelectCardsArgs : System.EventArgs {
-    public int[] cards;///<Remark>list of ids of the selected by the player</Remark>
+    public string[] cards;///<Remark>list of ids of the selected by the player</Remark>
 }
 
 public class SelectTargetPlayerArgs: System.EventArgs {
@@ -104,4 +104,31 @@ public class WebPlayerConnectedArgs : EventArgs {
 public class WebPlayerDisconnectedArgs : EventArgs {
     public string playerName;
     public List<string> messageTargets;
+}
+
+public class  StartGameArgs : EventArgs {
+    
+}
+
+public class DrawStartingHandArgs : EventArgs {
+    public int numCards;
+}
+
+public class GetStartingHandArgs : EventArgs {
+    public int numCards;
+    public string playerId;
+}
+
+public class GetStartingHandResponseArgs : EventArgs {
+    public List<GameObject> cards;
+}
+
+public class WebGameStartArgs : EventArgs {
+    public string messageTarget;
+    public List<string> cards;
+}
+
+public class WebStartTurnArgs : EventArgs {
+    public string messageTargets;
+    public string playerName;
 }

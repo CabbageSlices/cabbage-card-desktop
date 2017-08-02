@@ -67,6 +67,29 @@ public class PlayerTurnManager : MonoBehaviour {
         }   
     }
 
+    public string getIdNextPlayer() {
+
+        if(indexNextPlayer < transform.childCount)
+            return transform.GetChild(indexNextPlayer).GetComponent<PlayerInfo>().playerId;
+
+        return "";
+    }
+
+    public string getIdCurrentPlayer() {
+
+        if (indexCurrentPlayer < transform.childCount)
+            return transform.GetChild(indexCurrentPlayer).GetComponent<PlayerInfo>().playerId;
+
+        return "";
+    }
+
+    public string getNameCurrentPlayer() {
+        if (indexCurrentPlayer < transform.childCount)
+            return transform.GetChild(indexCurrentPlayer).GetComponent<PlayerInfo>().playerName;
+
+        return "";
+    }
+
     /// <summary>
     /// Marks the given player as dead so that he his turn doesn't come up again
     /// If it is currently his turn then he must end his turn (allows them to do other stuff once they die)

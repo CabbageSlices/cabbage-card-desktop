@@ -6,21 +6,18 @@ using UnityEngine;
 /// Store information about the card, used to identify the card and figure out what pictures to use and so forth
 /// </summary>
 public class CardInfo : MonoBehaviour {
+    
+    public enum CardType {
+        BOMB,
+        EFFECT,
+        NO_EFFECT,
+    }
 
-    ///<Remark>count number of cardInfos created so that each card will have a unique ID </Remark>
-    private static int numberOfCardsGenerated = 0;
-    public int _cardId;
+    public string cardId;
 
     ///<Remark>name of  card, for now it should be the same as the card's front image name</Remark>
 	public string cardName;
 
-    public int cardId {
-        get {
-            return _cardId;
-        }
-    }
-
-    private void Start() {
-        _cardId = numberOfCardsGenerated++;
-    }
+    //indicates if it's a bomb or not
+    public CardType type;
 }

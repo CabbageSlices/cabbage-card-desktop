@@ -115,6 +115,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114733444430659974, guid: e314272032bdbe44cb4749738940f326,
+        type: 2}
+      propertyPath: cardPrefabs.Array.size
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 4363309976549126, guid: e314272032bdbe44cb4749738940f326, type: 2}
       propertyPath: m_LocalPosition.x
       value: -2.4
@@ -147,6 +152,34 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 1471008143834964, guid: e314272032bdbe44cb4749738940f326, type: 2}
+      propertyPath: m_TagString
+      value: Deck
+      objectReference: {fileID: 0}
+    - target: {fileID: 114733444430659974, guid: e314272032bdbe44cb4749738940f326,
+        type: 2}
+      propertyPath: cardPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 1704615215903254, guid: 88133a9bdf59c4f4084e83aae25bb337,
+        type: 2}
+    - target: {fileID: 114733444430659974, guid: e314272032bdbe44cb4749738940f326,
+        type: 2}
+      propertyPath: cardPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 1704615215903254, guid: 11e968c4e955c234ebe9947da63113fa,
+        type: 2}
+    - target: {fileID: 114733444430659974, guid: e314272032bdbe44cb4749738940f326,
+        type: 2}
+      propertyPath: cardPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 1704615215903254, guid: 6d2c9201ec755314f93ae0ee62b489a3,
+        type: 2}
+    - target: {fileID: 114733444430659974, guid: e314272032bdbe44cb4749738940f326,
+        type: 2}
+      propertyPath: cardPrefabs.Array.data[3]
+      value: 
+      objectReference: {fileID: 1704615215903254, guid: 0a74ff8064900dd428c4d5dff07d2979,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e314272032bdbe44cb4749738940f326, type: 2}
   m_IsPrefabParent: 0
